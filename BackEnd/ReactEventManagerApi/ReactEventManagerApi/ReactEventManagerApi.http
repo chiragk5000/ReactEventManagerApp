@@ -1,0 +1,6 @@
+@ReactEventManagerApi_HostAddress = http://localhost:5296
+
+GET {{ReactEventManagerApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
