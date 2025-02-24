@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\BackEnd",
+    "\\BackEnd\\ReactEventManagerApi",
+    "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi"
   ],
-  "SelectedNode": "\\C:\\Users\\chira\\Source\\Repos\\ReactEventManagerApp",
+  "SelectedNode": "\\BackEnd",
   "PreviewInSolutionExplorer": false
 }
