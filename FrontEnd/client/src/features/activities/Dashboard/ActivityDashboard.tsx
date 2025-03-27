@@ -34,7 +34,7 @@ export default function ActivityDashboard({ activities, selectActivity, cancelSe
             <Grid2 size={5}>
                 {
                     selectedActivity && !editMode &&
-                    <ActivityDetail activity={selectedActivity}
+                    <ActivityDetail selectedActivity={selectedActivity}
                         cancelSelectActivity={cancelSelectActivity}
                         openForm={openForm}
                     />

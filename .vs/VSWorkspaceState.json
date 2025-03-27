@@ -3,8 +3,11 @@
     "",
     "\\BackEnd",
     "\\BackEnd\\ReactEventManagerApi",
+    "\\BackEnd\\ReactEventManagerApi\\Application",
+    "\\BackEnd\\ReactEventManagerApi\\Application\\Activities",
+    "\\BackEnd\\ReactEventManagerApi\\Application\\Activities\\Command",
     "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi"
   ],
-  "SelectedNode": "\\BackEnd",
+  "SelectedNode": "\\BackEnd\\ReactEventManagerApi\\Application\\Activities\\Command\\EditActivity.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -9,7 +9,7 @@ export const useActivites = () => {
     queryKey: ['activities'],
     queryFn: async () => {
       const response = await agentapi.get<Activity[]>('Activities');
-      console.log("response",response.data)
+      //console.log("response",response.data)
           return response.data;
           
     }

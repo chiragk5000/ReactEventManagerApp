@@ -57,8 +57,8 @@ export default function ActivityForm({ activity, closeForm }: Props) {
                     <Button onClick={closeForm} color='inherit'>
                         Cancel
                     </Button>
-                    <Button type="submit" color='success' variant='contained' disabled={updateActivity.isLoading 
-                        || createActivity.isLoading}>
+                    <Button type="submit" color='success' variant='contained' 
+                    disabled={updateActivity.isLoading || createActivity.isLoading}>
                         Submit
                     </Button>
                 </Box>

@@ -6,7 +6,7 @@ const agentapi = axios.create({
  
     
 });
-console.log("agentapi",agentapi);
+//console.log("agentapi",agentapi);
 const sleep = (delay: number) => {
     return new Promise(resolve => {
         setTimeout(resolve, delay);
@@ -16,7 +16,7 @@ const sleep = (delay: number) => {
 agentapi.interceptors.response.use(async response => {
     try {
         await sleep(1000);
-        console.log("response1",response)
+        //console.log("response1",response)
         return response;
     }
     catch (error) {
