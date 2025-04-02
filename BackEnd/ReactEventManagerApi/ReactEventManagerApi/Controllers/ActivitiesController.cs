@@ -42,7 +42,6 @@ namespace ReactEventManagerApi.Controllers
             //var activity = await _context.Activities.FindAsync(id);
 
             //if (activity == null)
-
             //{
             //    return NotFound();
             //}

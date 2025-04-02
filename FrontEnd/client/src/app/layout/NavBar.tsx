@@ -9,7 +9,7 @@ import MenuItemlink from "../shared/component/MenuItemlink";
 export default function NavBar() {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundImage: 'linear-graident(135deg,rgb(115, 24, 86) 0%, #218aae 69%, #20a7ac 89% )' }}>
+            <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(135deg,rgb(115, 24, 86) 0%, #218aae 69%, #20a7ac 89% )' }}>
                 <Container maxWidth='xl'>
                     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Box>

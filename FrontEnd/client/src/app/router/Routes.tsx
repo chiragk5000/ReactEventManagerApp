@@ -3,7 +3,7 @@ import App from "../layout/App";
 import ActivityDashboard from "../../features/activities/Dashboard/ActivityDashboard";
 import ActivityForm from "../../features/activities/Form/ActivityForm";
 import Homepage from "../../features/home/Homepage";
-import ActivityDetail from "../../features/activities/Details/ActivityDetail";
+import ActivityDetailPage from "../../features/activities/Details/ActivityDetailPage";
 
 export const router  = createBrowserRouter([
     {
@@ -12,7 +12,7 @@ export const router  = createBrowserRouter([
         children:[
             {path:'',element:<Homepage/>},
             {path:'activites',element:<ActivityDashboard/>},
-            {path:'activites/:id',element:<ActivityDetail/>},
+            {path:'activites/:id',element:<ActivityDetailPage/>},
             {path:'createActivity',element:<ActivityForm key='create'/>},
             {path:'manage/:id',element:<ActivityForm/>},
         ]
