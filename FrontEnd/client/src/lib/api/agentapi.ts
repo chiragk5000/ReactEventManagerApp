@@ -1,4 +1,5 @@
 import axios from "axios";
+import { store } from "../stores/store";
 
 
 const agentapi = axios.create({
@@ -13,6 +14,11 @@ const sleep = (delay: number) => {
     })
 }
 
+agentapi.interceptors.request.use(config => {
+store.uiStore.isBusy();
+return config;
+})
+
 agentapi.interceptors.response.use(async response => {
     try {
         await sleep(1000);
@@ -23,6 +29,9 @@ agentapi.interceptors.response.use(async response => {
         console.log(error);
         return Promise.reject(error);
 
+    }
+    finally{
+        store.uiStore.isIdle();
     }
 })
 

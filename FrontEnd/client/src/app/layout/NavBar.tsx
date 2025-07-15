@@ -1,15 +1,21 @@
 import Group from "@mui/icons-material/Group";
-import { Box, AppBar, Toolbar, Typography,  Container, MenuItem } from "@mui/material";
+import { Box, AppBar, Toolbar, Typography,  Container, MenuItem, LinearProgress } from "@mui/material";
 import { NavLink } from "react-router";
 import MenuItemlink from "../shared/component/MenuItemlink";
+import { useStore } from "../../lib/hooks/useStore";
+import { Observer } from "mobx-react-lite";
 
 // type Props = {
 //     openForm : () => void
 // }
 export default function NavBar() {
+    const {uiStore} = useStore();
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(135deg,rgb(115, 24, 86) 0%, #218aae 69%, #20a7ac 89% )' }}>
+            <AppBar position="static" 
+            sx={{ backgroundImage: 'linear-gradient(135deg,rgb(115, 24, 86) 0%, #218aae 69%, #20a7ac 89% )', 
+                position:'relative'
+            }}>
                 <Container maxWidth='xl'>
                     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Box>
@@ -29,6 +35,14 @@ export default function NavBar() {
                                 >
                                 Create Activity
                             </MenuItemlink>
+                            
+                        </Box>
+                        <Box>
+                            <MenuItemlink
+                                 to='/counter'
+                                >
+                                Counter
+                            </MenuItemlink>
                         </Box>
                         {/* <Box>
                             <MenuItem sx={{ fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
@@ -40,6 +54,21 @@ export default function NavBar() {
                         </MenuItem>
                     </Toolbar>
                 </Container>
+                <Observer>
+                    {()=>uiStore.isLoading ? (
+                        <LinearProgress
+                        color="secondary"
+                        sx={{
+                            position:'absolute',
+                            bottom:0,
+                            left:0,
+                            right:0,
+                            height:4
+                        }}
+                        />
+
+                    ) :null}
+                </Observer>
             </AppBar>
         </Box>
     );
