@@ -1,8 +1,11 @@
 using Application.Activities.Queries;
+using Application.Activities.Validator;
 using Application.Core;
+using FluentValidation;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ReactEventManagerApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +22,16 @@ var connectionString = builder.Configuration.GetConnectionString("EventManagerDa
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddCors();
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>()); // for single 
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>(); // for single 
+    x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+});
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValdiator>(); // for fluent valdiator 
 //builder.Services.AddMediatR(AppDomain.CurrentDomain.Load("Application"));
+builder.Services.AddTransient<ExceptionMiddleware>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +44,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
             .WithOrigins("https://localhost:3000"));
 app.MapControllers();

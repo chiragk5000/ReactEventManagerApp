@@ -43,7 +43,15 @@ export default function NavBar() {
                                 >
                                 Counter
                             </MenuItemlink>
+                            </Box>
+                            <Box>
+                            <MenuItemlink
+                                 to='/errors'
+                                >
+                                Errors
+                            </MenuItemlink>
                         </Box>
+
                         {/* <Box>
                             <MenuItem sx={{ fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
                                 Contact

@@ -6,16 +6,16 @@
 
         public string? Title { get; set; }
         public DateTime Date { get; set; }
-        public required string Description { get; set; }
-        public required string Category { get; set; }
+        public  string Description { get; set; }
+        public  string Category { get; set; }
 
         public bool IsCancelled { get; set; }
 
         // location pprops
 
-        public required string City { get; set; }
+        public  string City { get; set; }
 
-        public required string Venue { get; set; }
+        public  string Venue { get; set; }
 
         public double Latitude { get; set; }
         public double Longitutde { get; set; }
