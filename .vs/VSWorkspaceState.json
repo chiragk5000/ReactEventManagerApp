@@ -6,8 +6,9 @@
     "\\BackEnd\\ReactEventManagerApi\\Application",
     "\\BackEnd\\ReactEventManagerApi\\Application\\Activities",
     "\\BackEnd\\ReactEventManagerApi\\Application\\Activities\\Command",
-    "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi"
+    "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi",
+    "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi\\Controllers"
   ],
-  "SelectedNode": "\\BackEnd\\ReactEventManagerApi\\Application\\Activities\\Command\\EditActivity.cs",
+  "SelectedNode": "\\BackEnd\\ReactEventManagerApi\\ReactEventManagerApi\\Controllers\\ActivitiesController.cs",
   "PreviewInSolutionExplorer": false
 }

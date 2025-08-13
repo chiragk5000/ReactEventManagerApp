@@ -30,6 +30,7 @@ namespace ReactEventManagerApi.Controllers
 
         // GET: api/Activities
         [HttpGet]
+
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
         {
             return await Mediator.Send(new GetActivityList.Query());

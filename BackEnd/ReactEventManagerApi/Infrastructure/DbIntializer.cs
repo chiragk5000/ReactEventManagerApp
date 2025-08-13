@@ -1,17 +1,33 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 namespace Infrastructure
 {
     public class DbIntializer()
     {
-        public  async Task SeedData(AppDbContext context)
+        public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<User>
+                {
+                    new User{DisplayName="Bob",UserName="bob@test.com",Email="bob@test.com"},
+                    new User{DisplayName="Tom",UserName="Tom@test.com",Email="tom@test.com"},
+                    new User{DisplayName="John",UserName="John@test.com",Email="john@test.com"},
+
+                };
+                foreach (var user in users)
+                {
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
             if (context.Activities.Any()) return;
             var activities = ActivitySeedData();
             context.Activities.AddRange(activities);
 
         }
-    
-    public List<Activity> ActivitySeedData()
+
+        public static List<Activity> ActivitySeedData()
         {
             var activities = new List<Activity>
             {
