@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agentapi from "../api/agentapi";
 import { useLocation } from "react-router";
+import { useAccount } from "./useAcounts";
 
 export const useActivites = (id?:string) => {
   //const apiurl = '/Activities';
+  const {currentUser} = useAccount();
   const queryClient = useQueryClient();
   const location = useLocation();
 
@@ -16,7 +18,7 @@ export const useActivites = (id?:string) => {
           return response.data;
           
     },
-    enabled:!id && location.pathname ==='/activites'
+    enabled:!id && location.pathname ==='/activites' && !!currentUser
     //staleTime: 1000 *60 * 5 
   });
 
@@ -40,7 +42,7 @@ export const useActivites = (id?:string) => {
       const response = await agentapi.get<Activity>(`/Activities/${id}`)
       return response.data;
     },
-    enabled:!!id
+    enabled:!!id && !!currentUser
 
   })
 

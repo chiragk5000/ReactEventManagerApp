@@ -9,6 +9,8 @@ export default function ActivityList() {
 
     if(!activities || isLoading) return <Typography>Loading...</Typography>
 
+    if(!activities) return <Typography>No activities found </Typography>
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {activities.map(activity => (

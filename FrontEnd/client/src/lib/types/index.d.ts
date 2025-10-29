@@ -13,8 +13,15 @@ type Activity = {
 }
 
 
+type User={
+  id:string
+  email:string
+  displayName:string
+  bio:string
+  imageUrl?:string
+}
 
-export type LocationIQSuggestion = {
+type LocationIQSuggestion = {
   place_id: string
   osm_type: string
   osm_id: string
@@ -31,7 +38,7 @@ export type LocationIQSuggestion = {
 }
 
 
-export type LocationIQAddress = {
+type LocationIQAddress = {
   name: string
   house_number: string
   road: string

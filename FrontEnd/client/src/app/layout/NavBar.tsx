@@ -4,12 +4,15 @@ import { NavLink } from "react-router";
 import MenuItemlink from "../shared/component/MenuItemlink";
 import { useStore } from "../../lib/hooks/useStore";
 import { Observer } from "mobx-react-lite";
+import { useAccount } from "../../lib/hooks/useAcounts";
+import UserMenu from "./UserMenu";
 
 // type Props = {
 //     openForm : () => void
 // }
 export default function NavBar() {
     const {uiStore} = useStore();
+    const {currentUser} = useAccount();
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" 
@@ -30,11 +33,11 @@ export default function NavBar() {
                             </MenuItemlink>
                         </Box>
                         <Box>
-                            <MenuItemlink
+                            {/* <MenuItemlink
                                  to='/createActivity'
                                 >
                                 Create Activity
-                            </MenuItemlink>
+                            </MenuItemlink> */}
                             
                         </Box>
                         <Box>
@@ -57,9 +60,19 @@ export default function NavBar() {
                                 Contact
                             </MenuItem>
                         </Box> */}
-                        <MenuItem>
-                        User menu
-                        </MenuItem>
+                        <Box display='flex' alignItems='center'>
+                                {
+                                    currentUser ? (
+                                        // <Typography>Welcome {currentUser.displayName}</Typography>
+                                        <UserMenu/>
+                                    ) :(
+                                        <>
+                                        <MenuItemlink to='/login'>Login</MenuItemlink>
+                                        <MenuItemlink to='/register'>Register</MenuItemlink>
+                                        </>
+                                    )
+                                }
+                        </Box>
                     </Toolbar>
                 </Container>
                 <Observer>
