@@ -1,5 +1,5 @@
 ﻿using Application.Core;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -20,6 +20,8 @@
         public double Latitude { get; set; }
         public double Longitutde { get; set; }
 
+        // nav properties 
+        public ICollection<ActivityAttendee> Attendees { get; set; } = [];
 
     }
 }

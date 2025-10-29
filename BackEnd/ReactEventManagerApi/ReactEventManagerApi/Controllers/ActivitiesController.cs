@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Application.Activities.Command;
+using Application.Activities.DTO;
+using Application.Activities.Queries;
+using Domain.Entities;
+using Infrastructure.DbContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
-using Infrastructure;
-using MediatR;
-using Application.Activities.Queries;
-using Application.Activities.Command;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Application.Activities.DTO;
 
 namespace ReactEventManagerApi.Controllers
 {

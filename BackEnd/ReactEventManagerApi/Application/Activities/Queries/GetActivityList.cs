@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

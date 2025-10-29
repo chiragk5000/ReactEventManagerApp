@@ -3,7 +3,7 @@ using Application.Core;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
 using System;
 using System.Collections.Generic;

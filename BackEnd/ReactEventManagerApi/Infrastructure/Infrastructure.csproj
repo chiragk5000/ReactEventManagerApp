@@ -19,5 +19,9 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.13" />
 		
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="DbOperations\Interfaces\" />
+	  <Folder Include="DbOperations\Concrete\" />
+	</ItemGroup>
 
 </Project>

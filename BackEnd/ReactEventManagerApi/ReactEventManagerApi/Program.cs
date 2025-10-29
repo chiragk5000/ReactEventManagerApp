@@ -3,7 +3,7 @@ using Application.Activities.Validator;
 using Application.Core;
 using Domain;
 using FluentValidation;
-using Infrastructure;
+using Infrastructure.DbContext;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

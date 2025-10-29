@@ -1,6 +1,6 @@
 ﻿using Application.Core;
 using Domain.Entities;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
 
 namespace Application.Activities.Queries

@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-namespace Infrastructure
+namespace Infrastructure.DbContext
 {
     public class DbIntializer()
     {
