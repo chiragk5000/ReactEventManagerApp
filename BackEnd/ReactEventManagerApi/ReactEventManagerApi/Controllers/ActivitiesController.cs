@@ -3,8 +3,10 @@ using Application.Activities.DTO;
 using Application.Activities.Queries;
 using Domain.Entities;
 using Infrastructure.DbContext;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ReactEventManagerApi.DTOs;
 
 namespace ReactEventManagerApi.Controllers
 {
@@ -24,14 +26,14 @@ namespace ReactEventManagerApi.Controllers
         // GET: api/Activities
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
+        public async Task<ActionResult<IEnumerable<ActivityDTO>>> GetActivities()
         {
             return await Mediator.Send(new GetActivityList.Query());
         }
 
         // GET: api/Activities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(string id)
+        public async Task<ActionResult<ActivityDTO>> GetActivity(string id)
         {
             return HandleResult(await Mediator.Send(new GetActivityDetails.Query { Id=id}));
         }
@@ -99,13 +101,16 @@ namespace ReactEventManagerApi.Controllers
 
         }
 
-        [HttpPut]
-        public async Task <ActionResult<Activity>> EditActivty(EditActivityDTO activity)
+        [HttpPut("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
+        public async Task <ActionResult<Activity>> EditActivty(string id,EditActivityDTO activity)
         {
+            activity.Id = id;
              return HandleResult(await Mediator.Send(new EditActivity.Command { ActivityDto=activity}));
         }
         // DELETE: api/Activities/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<IActionResult> DeleteActivity(string id)
         {
             return HandleResult(await Mediator.Send(new DeleteActivity.Command { Id = id }));
@@ -133,5 +138,12 @@ namespace ReactEventManagerApi.Controllers
         {
             return _context.Activities.Any(e => e.Id == id);
         }
+
+        [HttpPost("{id}/attend")]
+        public async Task<ActionResult> Attend(string id)
+        {
+            return HandleResult(await Mediator.Send(new UpdateAttendance.Command { Id = id }));
+        }
+
     }
 }

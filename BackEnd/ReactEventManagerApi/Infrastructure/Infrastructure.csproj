@@ -20,7 +20,9 @@
 		
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="DbOperations\Interfaces\" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App"></FrameworkReference>
+	</ItemGroup>
+	<ItemGroup>
 	  <Folder Include="DbOperations\Concrete\" />
 	</ItemGroup>
 

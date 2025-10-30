@@ -7,91 +7,255 @@ namespace Infrastructure.DbContext
     {
         public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
         {
-            if (!userManager.Users.Any())
-            {
-                var users = new List<User>
+            var users = new List<User>
                 {
                     new User{DisplayName="Bob",UserName="bob@test.com",Email="bob@test.com"},
                     new User{DisplayName="Tom",UserName="Tom@test.com",Email="tom@test.com"},
                     new User{DisplayName="John",UserName="John@test.com",Email="john@test.com"},
 
                 };
+            if (!userManager.Users.Any())
+            {
+                
                 foreach (var user in users)
                 {
                     var result = await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
             if (context.Activities.Any()) return;
-            var activities = ActivitySeedData();
+            var activities = ActivitySeedData(users);
             context.Activities.AddRange(activities);
 
         }
 
-        public static List<Activity> ActivitySeedData()
+        public static List<Activity> ActivitySeedData(List<User> users)
         {
             var activities = new List<Activity>
+        {
+            new()
             {
-                new ()
-                {
-                Title = "Music Concert",
-                Date = DateTime.UtcNow.AddDays(5),
-                Description = "Live music concert featuring popular bands.",
-                Category = "Music",
-                IsCancelled = false,
-                City = "New York",
-                Venue = "Madison Square Garden",
-                Latitude = 40.7505,
-                Longitutde = -73.9934
-                },
-                new ()
-                {
-                Title = "Tech Conference",
-                Date = DateTime.UtcNow.AddMonths(1),
-                Description = "Annual technology conference with keynote speakers.",
-                Category = "Technology",
-                IsCancelled = false,
-                City = "San Francisco",
-                Venue = "Moscone Center",
-                Latitude = 37.7847,
-                Longitutde = -122.4011
-                },
-                new ()
-                {
-                Title = "Marathon",
-                Date = DateTime.UtcNow.AddDays(30),
-                Description = "City-wide marathon for charity.",
-                Category = "Sports",
-                IsCancelled = false,
-                City = "Boston",
-                Venue = "Boston Commons",
-                Latitude = 42.3554,
-                Longitutde = -71.0656
-                },
-                new ()
-                {
-                Title = "Art Exhibition",
-                Date = DateTime.UtcNow.AddDays(10),
-                Description = "Showcasing modern and contemporary art.",
-                Category = "Art",
-                IsCancelled = false,
+                Title = "Past Activity 1",
+                Date = DateTime.Now.AddMonths(-2),
+                Description = "Activity 2 months ago",
+                Category = "drinks",
+                City = "London",
+                Venue =
+                    "The Lamb and Flag, 33, Rose Street, Seven Dials, Covent Garden, London, Greater London, England, WC2E 9EB, United Kingdom",
+                Latitude = 51.51171665,
+                Longitutde = -0.1256611057818921,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[0].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[1].Id,
+                        IsHost = false,
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Past Activity 2",
+                Date = DateTime.Now.AddMonths(-1),
+                Description = "Activity 1 month ago",
+                Category = "culture",
                 City = "Paris",
-                Venue = "Louvre Museum",
-                Latitude = 48.8606,
-                Longitutde = 2.3376
-                },
-                new ()
-                {
-                Title = "Food Festival",
-                Date = DateTime.UtcNow.AddDays(15),
-                Description = "A celebration of world cuisines and local food vendors.",
-                Category = "Food",
-                IsCancelled = false,
-                City = "Los Angeles",
-                Venue = "LA Convention Center",
-                Latitude = 34.0407,
-                Longitutde = -118.2690
-                }
-            };
+                Venue =
+                    "Louvre Museum, Rue Saint-Honoré, Quartier du Palais Royal, 1st Arrondissement, Paris, Ile-de-France, Metropolitan France, 75001, France",
+                Latitude = 48.8611473,
+                Longitutde = 2.33802768704666,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[1].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[2].Id
+                    },
+                    new()
+                    {
+                        UserId = users[0].Id,
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 1",
+                Date = DateTime.Now.AddMonths(1),
+                Description = "Activity 1 month in future",
+                Category = "culture",
+                City = "London",
+                Venue = "Natural History Museum",
+                Latitude = 51.496510900000004,
+                Longitutde = -0.17600190725447445,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[2].Id,
+                        IsHost = true,
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 2",
+                Date = DateTime.Now.AddMonths(2),
+                Description = "Activity 2 months in future",
+                Category = "music",
+                City = "London",
+                Venue = "The O2",
+                Latitude = 51.502936649999995,
+                Longitutde = 0.0032029278126681844,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[0].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[2].Id
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 3",
+                Date = DateTime.Now.AddMonths(3),
+                Description = "Activity 3 months in future",
+                Category = "drinks",
+                City = "London",
+                Venue = "The Mayflower",
+                Latitude = 51.501778,
+                Longitutde = -0.053577,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[1].Id,
+                        IsHost = true,
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 4",
+                Date = DateTime.Now.AddMonths(4),
+                Description = "Activity 4 months in future",
+                Category = "drinks",
+                City = "London",
+                Venue = "The Blackfriar",
+                Latitude = 51.512146650000005,
+                Longitutde = -0.10364680647106028,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[2].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[0].Id
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 5",
+                Date = DateTime.Now.AddMonths(5),
+                Description = "Activity 5 months in future",
+                Category = "culture",
+                City = "London",
+                Venue =
+                    "Sherlock Holmes Museum, 221b, Baker Street, Marylebone, London, Greater London, England, NW1 6XE, United Kingdom",
+                Latitude = 51.5237629,
+                Longitutde = -0.1584743,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[0].Id,
+                        IsHost = true,
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 6",
+                Date = DateTime.Now.AddMonths(6),
+                Description = "Activity 6 months in future",
+                Category = "music",
+                City = "London",
+                Venue =
+                    "Roundhouse, Chalk Farm Road, Maitland Park, Chalk Farm, London Borough of Camden, London, Greater London, England, NW1 8EH, United Kingdom",
+                Latitude = 51.5432505,
+                Longitutde = -0.15197608174931165,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[1].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[0].Id
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 7",
+                Date = DateTime.Now.AddMonths(7),
+                Description = "Activity 7 months in future",
+                Category = "travel",
+                City = "London",
+                Venue = "River Thames, England, United Kingdom",
+                Latitude = 51.5575525,
+                Longitutde = -0.781404,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[2].Id,
+                        IsHost = true,
+                    },
+                    new()
+                    {
+                        UserId = users[1].Id
+                    }
+                ]
+            },
+            new()
+            {
+                Title = "Future Activity 8",
+                Date = DateTime.Now.AddMonths(8),
+                Description = "Activity 8 months in future",
+                Category = "film",
+                City = "London",
+                Venue = "Odeon Leicester Square",
+                Latitude = 51.5575525,
+                Longitutde = -0.781404,
+                Attendees =
+                [
+                    new()
+                    {
+                        UserId = users[0].Id,
+                        IsHost = true,
+                    }
+                ]
+            }
+        };
             return activities;
         }
     }
