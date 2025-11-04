@@ -2,7 +2,7 @@
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
 
 namespace Application.Activities.Command

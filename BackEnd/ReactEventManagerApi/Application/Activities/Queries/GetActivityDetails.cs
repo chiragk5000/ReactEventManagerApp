@@ -1,26 +1,34 @@
 ﻿using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
-using Infrastructure;
+using Infrastructure.DbContext;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ReactEventManagerApi.DTOs;
 
 namespace Application.Activities.Queries
 {
     public class GetActivityDetails
     {
-        public class Query : IRequest<Result<Activity>>
+        public class Query : IRequest<Result<ActivityDTO>>
         {
             public required string Id { get; set; }
         }
-        public class Handler(AppDbContext context) : IRequestHandler<Query, Result<Activity>>
+        public class Handler(AppDbContext context,IMapper mapper) : IRequestHandler<Query, Result<ActivityDTO>>
         {
-            public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ActivityDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await context.Activities.FindAsync([request.Id], cancellationToken);
+                
+                // concept of eager laoding load all in include and theninclude
+                //var activity = await context.Activities.Include(x => x.Attendees).ThenInclude(x => x.User).FirstOrDefaultAsync(x => request.Id == x.Id, cancellationToken);
+                var activity=await context.Activities.ProjectTo<ActivityDTO>(mapper.ConfigurationProvider).FirstOrDefaultAsync(x => request.Id == x.Id, cancellationToken); // using projection
                 if (activity == null)
                 {
-                    return Result<Activity>.Failure("Activity not found", 404);
+                    return Result<ActivityDTO>.Failure("Activity not found", 404);
                 }
-                return Result<Activity>.Success(activity);
+                //return Result<ActivityDTO>.Success(mapper.Map<ActivityDTO>(activity));
+                return Result<ActivityDTO>.Success(activity);
             }
         }
     }

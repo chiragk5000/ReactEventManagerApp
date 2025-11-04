@@ -1,4 +1,5 @@
 ﻿
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -10,6 +11,8 @@ namespace Domain
 
         public string? ImageUrl { get; set; }
 
+        // nav properties
+        public ICollection<ActivityAttendee> Activites { get; set; } = [];
 
     }
 }
