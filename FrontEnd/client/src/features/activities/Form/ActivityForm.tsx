@@ -49,19 +49,20 @@ export default function ActivityForm() {
 
     const onSubmit =  async (data:ActivitySchema) => {
 
-        console.log(data);
+        
         const {location, ...rest}=data;
         const actualdata = {...rest, ...location};
         try{
             if(activity){
                 updateActivity.mutate({...activity, ...actualdata},{
+                    
                     onSuccess:() =>  navigate(`/activites/${activity.id}`)
 
                 })
             }
             else{
                 createActivity.mutate(actualdata,{
-                    onSuccess:(data) => navigate(`/activites/${data.id}`)
+                    onSuccess:(data) => navigate(`/activites/${data}`)
                 })
             }
 
