@@ -25,6 +25,7 @@ namespace Infrastructure.DbContext
             if (context.Activities.Any()) return;
             var activities = ActivitySeedData(users);
             context.Activities.AddRange(activities);
+            context.SaveChanges();
 
         }
 

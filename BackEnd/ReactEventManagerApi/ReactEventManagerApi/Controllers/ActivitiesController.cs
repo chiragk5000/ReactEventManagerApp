@@ -38,6 +38,8 @@ namespace ReactEventManagerApi.Controllers
             return HandleResult(await Mediator.Send(new GetActivityDetails.Query { Id=id}));
         }
 
+        
+        /*
         // PUT: api/Activities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -68,7 +70,8 @@ namespace ReactEventManagerApi.Controllers
 
             return NoContent();
         }
-
+        */
+        /*
         // POST: api/Activities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -93,6 +96,7 @@ namespace ReactEventManagerApi.Controllers
 
             return CreatedAtAction("GetActivity", new { id = activity.Id }, activity);
         }
+        */
 
         [HttpPost("Create")]
         public async Task<ActionResult<string>> CreateActivity(CreateActivityDTO activitydto)
