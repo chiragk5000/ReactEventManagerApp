@@ -1,11 +1,6 @@
 ﻿using Application.Core;
-using Infrastructure.DbContext;
+using Application.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Activities.Command
 {
@@ -15,7 +10,7 @@ namespace Application.Activities.Command
         {
             public required string Id { get; set; }
         }
-        public class Handler(AppDbContext context) : IRequestHandler<Command, Result<Unit>>
+        public class Handler(IAppDbContext context) : IRequestHandler<Command, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -24,7 +19,7 @@ namespace Application.Activities.Command
                 {
                     return Result<Unit>.Failure("Activity not found", 404);
                 }
-                context.Remove(activity);
+                context.Activities.Remove(activity);
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
                 if (!result) return Result<Unit>.Failure("Failed to delete the activity", 404);
 

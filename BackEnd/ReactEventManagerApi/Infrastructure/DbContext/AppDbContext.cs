@@ -2,21 +2,24 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace Infrastructure.DbContext
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
      : base(options)
         {
             Activities = Set<Activity>();
             ActivityAttendees = Set<ActivityAttendee>();
-
+            Photos = Set<Photo>();
         }
 
-        public  DbSet<Activity> Activities { get; set; }
-        public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+        public   DbSet<Activity> Activities { get; set; }
+        public  DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+
+        public  DbSet<Photo> Photos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

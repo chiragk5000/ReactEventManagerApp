@@ -1,15 +1,8 @@
-﻿using Application.Activities.DTO;
-using Application.Core;
+﻿using Application.Core;
+using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.DbContext;
-using Infrastructure.DbOperations.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Activities.Command
 {
@@ -19,7 +12,7 @@ namespace Application.Activities.Command
         {
             public required string Id { get; set; }
         }
-        public class Handler(IUserAcessor userAcessor, AppDbContext dbContext) : IRequestHandler<Command, Result<Unit>>
+        public class Handler(IUserAcessor userAcessor, IAppDbContext dbContext) : IRequestHandler<Command, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {

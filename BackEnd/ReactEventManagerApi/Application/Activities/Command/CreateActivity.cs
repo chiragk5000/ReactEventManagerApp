@@ -2,9 +2,9 @@
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.DbContext;
-using Infrastructure.DbOperations.Interfaces;
+using Application.Interfaces;
 using MediatR;
+using System.Net;
 
 namespace Application.Activities.Command
 {
@@ -14,7 +14,7 @@ namespace Application.Activities.Command
         {
             public required CreateActivityDTO ActivityDto { get; set; }
         }
-        public class Handler(AppDbContext context, IMapper mapper,IUserAcessor userAccessor ): IRequestHandler<Command, Result<string>>
+        public class Handler(IAppDbContext context, IMapper mapper,IUserAcessor userAccessor ): IRequestHandler<Command, Result<string>>
         {
             public async Task<Result<string>> Handle(Command request,CancellationToken cancellationToken)
             {
@@ -33,7 +33,7 @@ namespace Application.Activities.Command
                 activity.Attendees.Add(attendee);
 
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
-                if (!result) return Result<string>.Failure("Failed to create  the activity", 400);
+                if (!result) return Result<string>.Failure("Failed to create  the activity", (int)HttpStatusCode.InternalServerError);
 
                 return Result<string>.Success(activity.Id);
 

@@ -1,9 +1,9 @@
 ﻿using Domain;
 using Infrastructure.DbContext;
-using Infrastructure.DbOperations.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Application.Interfaces;
 
 namespace Infrastructure.Security
 {
@@ -37,5 +37,12 @@ namespace Infrastructure.Security
             return claim;
         }
 
+        public async Task<User> GetUserWithPhotosAsync()
+        {
+            var user = await GetUserAsync();
+            return await dbContext.Users.Include(x => x.Photos)
+                .FirstOrDefaultAsync(x => x.Id == user.Id) 
+                    ?? throw new UnauthorizedAccessException("No user is logged in");
+        }
     }
 }

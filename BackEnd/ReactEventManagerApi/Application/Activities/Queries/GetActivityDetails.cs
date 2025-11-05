@@ -1,8 +1,7 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Entities;
-using Infrastructure.DbContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ReactEventManagerApi.DTOs;
@@ -15,7 +14,7 @@ namespace Application.Activities.Queries
         {
             public required string Id { get; set; }
         }
-        public class Handler(AppDbContext context,IMapper mapper) : IRequestHandler<Query, Result<ActivityDTO>>
+        public class Handler(IAppDbContext context,IMapper mapper) : IRequestHandler<Query, Result<ActivityDTO>>
         {
             public async Task<Result<ActivityDTO>> Handle(Query request, CancellationToken cancellationToken)
             {

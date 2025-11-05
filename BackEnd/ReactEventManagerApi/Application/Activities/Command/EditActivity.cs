@@ -1,8 +1,7 @@
 ﻿using Application.Activities.DTO;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities;
-using Infrastructure.DbContext;
 using MediatR;
 
 namespace Application.Activities.Command
@@ -13,7 +12,7 @@ namespace Application.Activities.Command
         {
             public required EditActivityDTO ActivityDto  { get; set; }
         }
-        public class Handler(AppDbContext context,IMapper mapper) : IRequestHandler<Command, Result<Unit>>
+        public class Handler(IAppDbContext context,IMapper mapper) : IRequestHandler<Command, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {

@@ -1,21 +1,19 @@
 ﻿using Application.Activities.Queries;
 using Application.Activities.Validator;
 using Application.Core;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using Infrastructure.DbContext;
-using Infrastructure.DbOperations.Interfaces;
+using Infrastructure.Photos;
 using Infrastructure.Security;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ReactEventManagerApi.Middleware;
-using System.Net;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,7 +75,10 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>(); // for single 
     x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
 });
-builder.Services.AddScoped<IUserAcessor, UserAcessor>();
+builder.Services.AddScoped<IAppDbContext>(sp => (IAppDbContext)sp.GetRequiredService<AppDbContext>());
+
+builder.Services.AddScoped<IUserAcessor,UserAcessor>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValdiator>(); // for fluent valdiator 
@@ -138,6 +139,8 @@ builder.Services.AddAuthorization(opt =>
     });
 });
 builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 
 
 

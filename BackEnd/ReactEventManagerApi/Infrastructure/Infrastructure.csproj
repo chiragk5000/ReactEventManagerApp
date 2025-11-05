@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+	  <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Castle.Core" Version="5.2.1" />
+		<PackageReference Include="CloudinaryDotNet" Version="1.27.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
