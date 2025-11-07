@@ -3,7 +3,7 @@ import { requiredString } from "../util/util";
 
 export const registerSchema=z.object({
     email:z.email(),
-    displayName :  requiredString('displayName'),
+    displayName :  requiredString('Display Name'),
     password:requiredString('password')
 
 })
