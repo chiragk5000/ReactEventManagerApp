@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import { Avatar, Link } from '@mui/material';
+import { Avatar } from '@mui/material';
 import ProfileCard from '../../../features/profiles/ProfileCard';
+import { Link } from 'react-router';
 
 
 
