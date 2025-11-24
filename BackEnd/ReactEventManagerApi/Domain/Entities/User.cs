@@ -1,8 +1,6 @@
-﻿
-using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace Domain
+namespace Domain.Entities
 {
     public class User:IdentityUser
     {
@@ -15,6 +13,10 @@ namespace Domain
         public ICollection<ActivityAttendee> Activites { get; set; } = [];
 
         public ICollection<Photo> Photos { get; set; } = [];
+
+        public ICollection<UserFollowing> Followings { get; set; } = [];
+        public ICollection<UserFollowing> Followers { get; set; } = [];
+
 
     }
 }

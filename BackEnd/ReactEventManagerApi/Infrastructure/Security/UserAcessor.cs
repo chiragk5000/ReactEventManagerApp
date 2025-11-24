@@ -1,9 +1,9 @@
-﻿using Domain;
-using Infrastructure.DbContext;
+﻿using Infrastructure.DbContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace Infrastructure.Security
 {

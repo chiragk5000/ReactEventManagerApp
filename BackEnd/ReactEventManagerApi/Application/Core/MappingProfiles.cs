@@ -1,7 +1,6 @@
 ﻿using Application.Activities.DTO;
 using Application.Prtofiles.DTOs;
 using AutoMapper;
-using Domain;
 using Domain.Entities;
 using ReactEventManagerApi.DTOs;
 

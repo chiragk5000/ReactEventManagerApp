@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
@@ -25,6 +24,8 @@ namespace Infrastructure.DbContext
 
         public DbSet<Comment> Comments { get; set; }
 
+        public DbSet<UserFollowing> UserFollowings { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,6 +43,23 @@ namespace Infrastructure.DbContext
                 .HasOne(x => x.Activity)
                 .WithMany(x => x.Attendees)
                 .HasForeignKey(x => x.ActivityId);
+
+            builder.Entity<UserFollowing>(x =>
+            {
+                x.HasKey(k => new { k.FollowerId, k.TargetUserId });
+
+                x.HasOne(o => o.Follower)
+                .WithMany(f => f.Followings)
+                .HasForeignKey(o => o.FollowerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                x.HasOne(o => o.TargetUser)
+               .WithMany(f => f.Followers)
+               .HasForeignKey(o => o.TargetUserId)
+               .OnDelete(DeleteBehavior.Restrict);
+            });
+
+           
 
             DatetimeConverter(builder);
 

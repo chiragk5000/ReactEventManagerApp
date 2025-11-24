@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 namespace Infrastructure.DbContext
 {
@@ -9,9 +8,9 @@ namespace Infrastructure.DbContext
         {
             var users = new List<User>
                 {
-                    new User{DisplayName="Bob",UserName="bob@test.com",Email="bob@test.com"},
-                    new User{DisplayName="Tom",UserName="Tom@test.com",Email="tom@test.com"},
-                    new User{DisplayName="John",UserName="John@test.com",Email="john@test.com"},
+                    new User{Id="bob-id",DisplayName="Bob",UserName="bob@test.com",Email="bob@test.com"},
+                    new User{Id="tom-id",DisplayName="Tom",UserName="Tom@test.com",Email="tom@test.com"},
+                    new User{Id = "john-id", DisplayName="John",UserName="John@test.com",Email="john@test.com"},
 
                 };
             if (!userManager.Users.Any())
