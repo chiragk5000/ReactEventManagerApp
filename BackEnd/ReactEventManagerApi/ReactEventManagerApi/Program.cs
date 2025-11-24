@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReactEventManagerApi.Middleware;
+using ReactEventManagerApi.SignalR;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,6 +71,10 @@ var connectionString = builder.Configuration.GetConnectionString("EventManagerDa
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddCors();
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>(); // for single 
@@ -121,6 +126,25 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // SignalR token read
+            var accessToken = context.Request.Query["access_token"];
+
+            // match hub path
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/comments"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 //.AddCookie(IdentityConstants.ApplicationScheme, options =>
 //{
@@ -162,7 +186,10 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
             .WithOrigins("https://localhost:3000"));
+app.MapHub<CommentHub>("/comments");
+
 app.MapControllers();
+
 using var scope = app.Services.CreateScope(); 
 var services = scope.ServiceProvider;
 try
