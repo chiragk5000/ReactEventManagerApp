@@ -2,7 +2,7 @@
 using Application.Activities.Validator;
 using Application.Core;
 using Application.Interfaces;
-using Domain;
+using Domain.Entities;
 using FluentValidation;
 using Infrastructure.DbContext;
 using Infrastructure.Photos;

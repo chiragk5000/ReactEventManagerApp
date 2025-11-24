@@ -3,40 +3,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAdded : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Activities",
-                keyColumn: "Id",
-                keyValue: "09917fd9-8a99-4613-a1a3-2b58caec9f12");
-
-            migrationBuilder.DeleteData(
-                table: "Activities",
-                keyColumn: "Id",
-                keyValue: "3e8a617f-57c2-4e5b-825c-1302d2c1237b");
-
-            migrationBuilder.DeleteData(
-                table: "Activities",
-                keyColumn: "Id",
-                keyValue: "67994be0-151d-4ea9-9e89-cfa34524bf84");
-
-            migrationBuilder.DeleteData(
-                table: "Activities",
-                keyColumn: "Id",
-                keyValue: "9e62464f-b12a-4afa-96bb-afe7f12cc178");
-
-            migrationBuilder.DeleteData(
-                table: "Activities",
-                keyColumn: "Id",
-                keyValue: "ace0b7e9-1c82-4395-81cb-8398b1419d08");
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsCancelled = table.Column<bool>(type: "bit", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Venue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitutde = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -97,6 +90,32 @@ namespace Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivityAttendees",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ActivityId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsHost = table.Column<bool>(type: "bit", nullable: false),
+                    DateJoined = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityAttendees", x => new { x.ActivityId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_ActivityAttendees_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivityAttendees_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -186,6 +205,80 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ActivityId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserFollowings",
+                columns: table => new
+                {
+                    FollowerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TargetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFollowings", x => new { x.FollowerId, x.TargetUserId });
+                    table.ForeignKey(
+                        name: "FK_UserFollowings_AspNetUsers_FollowerId",
+                        column: x => x.FollowerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UserFollowings_AspNetUsers_TargetUserId",
+                        column: x => x.TargetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityAttendees_UserId",
+                table: "ActivityAttendees",
+                column: "UserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -224,11 +317,34 @@ namespace Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ActivityId",
+                table: "Comments",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_UserId",
+                table: "Photos",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFollowings_TargetUserId",
+                table: "UserFollowings",
+                column: "TargetUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ActivityAttendees");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -245,22 +361,22 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "UserFollowings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Activities");
 
-            migrationBuilder.InsertData(
-                table: "Activities",
-                columns: new[] { "Id", "Category", "City", "Date", "Description", "IsCancelled", "Latitude", "Longitutde", "Title", "Venue" },
-                values: new object[,]
-                {
-                    { "09917fd9-8a99-4613-a1a3-2b58caec9f12", "Food", "Los Angeles", new DateTime(2025, 3, 7, 13, 50, 46, 206, DateTimeKind.Utc).AddTicks(7840), "A celebration of world cuisines and local food vendors.", false, 34.040700000000001, -118.26900000000001, "Food Festival", "LA Convention Center" },
-                    { "3e8a617f-57c2-4e5b-825c-1302d2c1237b", "Sports", "Boston", new DateTime(2025, 3, 22, 13, 50, 46, 206, DateTimeKind.Utc).AddTicks(7825), "City-wide marathon for charity.", false, 42.355400000000003, -71.065600000000003, "Marathon", "Boston Commons" },
-                    { "67994be0-151d-4ea9-9e89-cfa34524bf84", "Technology", "San Francisco", new DateTime(2025, 3, 20, 13, 50, 46, 206, DateTimeKind.Utc).AddTicks(7809), "Annual technology conference with keynote speakers.", false, 37.784700000000001, -122.4011, "Tech Conference", "Moscone Center" },
-                    { "9e62464f-b12a-4afa-96bb-afe7f12cc178", "Art", "Paris", new DateTime(2025, 3, 2, 13, 50, 46, 206, DateTimeKind.Utc).AddTicks(7832), "Showcasing modern and contemporary art.", false, 48.860599999999998, 2.3376000000000001, "Art Exhibition", "Louvre Museum" },
-                    { "ace0b7e9-1c82-4395-81cb-8398b1419d08", "Music", "New York", new DateTime(2025, 2, 25, 13, 50, 46, 206, DateTimeKind.Utc).AddTicks(7793), "Live music concert featuring popular bands.", false, 40.750500000000002, -73.993399999999994, "Music Concert", "Madison Square Garden" }
-                });
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

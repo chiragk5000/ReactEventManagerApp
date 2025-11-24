@@ -20,12 +20,12 @@ namespace Application.Profiles.Queries
         {
             public required string UserId { get; set; }
         }
-        public class Handler(IAppDbContext appDbContext, IMapper mapper) : IRequestHandler<Query, Result<UserProfile>>
+        public class Handler(IAppDbContext appDbContext, IMapper mapper,IUserAcessor userAcessor) : IRequestHandler<Query, Result<UserProfile>>
         {
             public async Task<Result<UserProfile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var profile = await appDbContext.Users
-                    .ProjectTo<UserProfile>(mapper.ConfigurationProvider)
+                    .ProjectTo<UserProfile>(mapper.ConfigurationProvider, new { currentUserId = await userAcessor.GetUserId() })
                     .SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
                 return profile == null

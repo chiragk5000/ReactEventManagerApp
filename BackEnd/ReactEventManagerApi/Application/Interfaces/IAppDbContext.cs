@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Interfaces
@@ -13,6 +12,9 @@ namespace Application.Interfaces
         DbSet<Photo> Photos { get; }
 
         DbSet<Comment> Comments { get; }
+
+        DbSet<UserFollowing> UserFollowings { get; }
+
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
