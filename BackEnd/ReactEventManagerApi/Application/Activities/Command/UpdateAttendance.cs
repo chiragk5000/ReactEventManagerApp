@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Application.Activities.Command
 {
@@ -42,7 +43,7 @@ namespace Application.Activities.Command
 
                 }
                 var result = await dbContext.SaveChangesAsync(cancellationToken) > 0;
-                return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Error occured in updating the attendance", 500);
+                return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Error occured in updating the attendance", (int)(HttpStatusCode.InternalServerError));
 
             }
         }

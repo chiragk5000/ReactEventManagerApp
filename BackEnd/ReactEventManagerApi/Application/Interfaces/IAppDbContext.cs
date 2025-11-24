@@ -12,6 +12,9 @@ namespace Application.Interfaces
 
         DbSet<Photo> Photos { get; }
 
+        DbSet<Comment> Comments { get; }
+
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

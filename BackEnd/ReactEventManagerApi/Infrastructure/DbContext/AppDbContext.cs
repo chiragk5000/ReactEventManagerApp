@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.DbContext
 {
@@ -14,12 +15,15 @@ namespace Infrastructure.DbContext
             Activities = Set<Activity>();
             ActivityAttendees = Set<ActivityAttendee>();
             Photos = Set<Photo>();
+            Comments = Set<Comment>();
         }
 
-        public   DbSet<Activity> Activities { get; set; }
-        public  DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
 
-        public  DbSet<Photo> Photos { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -38,6 +42,31 @@ namespace Infrastructure.DbContext
                 .HasOne(x => x.Activity)
                 .WithMany(x => x.Attendees)
                 .HasForeignKey(x => x.ActivityId);
+
+            DatetimeConverter(builder);
+
+
+        }
+
+        private void DatetimeConverter(ModelBuilder builder)
+        {
+            var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+                            v => v.ToUniversalTime(),
+                            v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                            );
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                }
+            }
+
         }
     }
 }
+
