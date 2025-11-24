@@ -13,6 +13,9 @@ namespace Application.Interfaces
 
         DbSet<Comment> Comments { get; }
 
+        DbSet<UserFollowing> UserFollowings { get; }
+
+
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

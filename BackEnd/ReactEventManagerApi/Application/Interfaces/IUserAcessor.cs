@@ -7,5 +7,7 @@ namespace Application.Interfaces
         string GetUserNameClaim();
          Task<User> GetUserAsync();
         Task<User> GetUserWithPhotosAsync();
+
+        Task<string> GetUserId();
     }
 }

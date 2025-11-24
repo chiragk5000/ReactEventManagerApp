@@ -44,5 +44,13 @@ namespace Infrastructure.Security
                 .FirstOrDefaultAsync(x => x.Id == user.Id) 
                     ?? throw new UnauthorizedAccessException("No user is logged in");
         }
+
+        
+
+        public async Task<string>  GetUserId()
+        {
+            var user = await GetUserAsync();
+            return user.Id;
+        }
     }
 }
