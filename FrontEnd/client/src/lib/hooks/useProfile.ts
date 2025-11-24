@@ -3,7 +3,7 @@ import agentapi from "../api/agentapi"
 import { useMemo } from "react";
 import { EditProfileSchema } from "../schemas/editProfileSchema";
 
-export const useProfile = (id?: string) => {
+export const useProfile = (id?: string,predicate?:string) => {
     const queryClient = useQueryClient();
 
     // Get profile
@@ -13,7 +13,7 @@ export const useProfile = (id?: string) => {
             const response = await agentapi.get<Profile>(`/profiles/${id}`);
             return response.data
         },
-        enabled: !!id
+        enabled: !!id && !predicate
 
 
     });
@@ -25,10 +25,23 @@ export const useProfile = (id?: string) => {
             const response = await agentapi.get<Photo[]>(`/profiles/${id}/photos`);
             return response.data
         },
-        enabled: !!id
+        enabled: !!id && !predicate
 
 
     });
+
+
+    // To get Followings  data 
+
+    const {data : followings , isLoading:loadingFollowings}=useQuery<Profile[]>(
+        {
+            queryKey:['followings',id,predicate],
+            queryFn: async ()=>{
+                const response = await agentapi.get<Profile[]>(`/profiles/${id}/follow-list?predicate=${predicate}`);
+                return response.data
+            },
+            enabled :!!id && !!predicate
+        });
 
 
     // Current user or another user 
@@ -138,6 +151,32 @@ const updateProfile = useMutation({
 })
 
 
+// For following 
+
+const updateFollowing = useMutation({
+    mutationFn:async()=>{
+        await agentapi.post(`/profiles/${id}/follow`)
+    },
+    onSuccess:()=>{
+        queryClient.setQueryData<Profile>(['profile',id],(profile)=>{
+            queryClient.invalidateQueries({queryKey:['followings',id,'followers']})
+            if(!profile || profile.followersCount === undefined) 
+            {
+                return profile
+            }
+            return {
+                ...profile,
+                following:!profile.following,
+                followersCount:profile.following 
+                ? profile.followersCount-1
+                : profile.followersCount + 1
+
+            }
+        })
+    }
+})
+
+
 
 
     return {
@@ -149,6 +188,9 @@ const updateProfile = useMutation({
         uploadPhoto,
         setMainPhoto,
         deletePhoto,
-        updateProfile
+        updateProfile,
+        updateFollowing,
+        followings,
+        loadingFollowings
     }
 }

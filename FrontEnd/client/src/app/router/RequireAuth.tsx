@@ -9,7 +9,7 @@ export default function RequireAuth() {
     const location = useLocation();
 
     if(loadingUserInfo) return <Typography>Loading...</Typography>
-    if(!currentUser) return <Navigate to='/login' state={{from:location}}/>
+    if(!currentUser) return <Navigate replace to='/login' state={{from:location}}/>
 
   return (
    <Outlet/>
