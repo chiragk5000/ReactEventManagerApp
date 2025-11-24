@@ -3,7 +3,7 @@ import { CloudUpload } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { useCallback, useRef, useState, useEffect } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
-import "cropperjs/dist/cropper.css"; // ✅ important: include cropper styles!
+import "cropperjs/dist/cropper.css"; 
 
 
 
