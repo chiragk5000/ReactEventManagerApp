@@ -77,6 +77,7 @@ agentapi.interceptors.response.use(async response => {
              case 401:
             toast.error('Unauthorized');
             router.navigate('/login')
+
             break;
             case 404:
             //toast.error('Not found');
@@ -95,6 +96,7 @@ agentapi.interceptors.response.use(async response => {
         return Promise.reject(error);
 
     }
+    
 )
 
 export default agentapi;

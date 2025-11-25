@@ -46,6 +46,9 @@ export const useAccount = () => {
     })
 
 
+
+
+
     // for registerUser
     const registerUser =useMutation({
         mutationFn:async (creds:RegisterSchema)=>{
@@ -66,7 +69,8 @@ export const useAccount = () => {
             return response.data
 
         },
-        enabled : !queryClient.getQueryData(['user']) && !isAuthPage
+        enabled : !queryClient.getQueryData(['user']) && !isAuthPage,
+        retry: false
 
     })
 
