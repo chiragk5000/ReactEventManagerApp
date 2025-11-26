@@ -2,16 +2,26 @@ import { Grid2 } from "@mui/material/";
 import ActivityList from "./ActivityList";
 import ActivityFilter from "./ActivityFilter";
 
-    export default function ActivityDashboard(){
+export default function ActivityDashboard() {
+    //const { isFetchingNextPage, fetchNextPage, hasNextPage } = useActivites();
 
     return (
         <Grid2 container spacing={3}>
             <Grid2 size={8}>
-             
-                <ActivityList/>
+
+                <ActivityList />
+                {/* <Button onClick={() => fetchNextPage()}
+                    sx={{ my: 2, float: 'right' }}
+                    variant="contained"
+                    disabled={!hasNextPage || isFetchingNextPage}
+                >
+                    Load More
+                </Button> */}
+
             </Grid2>
-            <Grid2 size={4}>
-               <ActivityFilter/>
+            <Grid2 size={4} sx={{position:'sticky',top:112,alignSelf:'flex-start'}}
+            >
+                <ActivityFilter />
             </Grid2>
 
         </Grid2>
