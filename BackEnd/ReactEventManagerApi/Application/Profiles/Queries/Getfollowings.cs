@@ -29,7 +29,7 @@ namespace Application.Profiles.Queries
                             .Select(x => x.Follower).ProjectTo<UserProfile>(mapper.ConfigurationProvider,
                             new {currentUserId = await userAcessor.GetUserId()}).ToListAsync(cancellationToken);
                         break;
-                    case "following":
+                    case "followings":
                         profiles = await dbContext.UserFollowings.Where(x => x.FollowerId == request.UserId)
                             .Select(x => x.TargetUser).ProjectTo<UserProfile>(mapper.ConfigurationProvider,
                             new { currentUserId = await userAcessor.GetUserId() }
@@ -39,6 +39,7 @@ namespace Application.Profiles.Queries
                 }
                 return Result<List<UserProfile>>.Success(profiles);
             }
+
         }
     }
 }
