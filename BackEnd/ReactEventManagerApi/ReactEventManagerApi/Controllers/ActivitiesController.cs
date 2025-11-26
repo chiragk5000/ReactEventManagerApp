@@ -1,6 +1,7 @@
 ﻿using Application.Activities.Command;
 using Application.Activities.DTO;
 using Application.Activities.Queries;
+using Application.Core;
 using Domain.Entities;
 using Infrastructure.DbContext;
 using Microsoft.AspNetCore.Authorization;
@@ -26,9 +27,9 @@ namespace ReactEventManagerApi.Controllers
         // GET: api/Activities
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<ActivityDTO>>> GetActivities()
+        public async Task<ActionResult<PagedList<ActivityDTO,DateTime?>>> GetActivities([FromQuery]ActivityParams activityParams)
         {
-            return await Mediator.Send(new GetActivityList.Query());
+            return HandleResult(await Mediator.Send(new GetActivityList.Query{Params= activityParams }));
         }
 
         // GET: api/Activities/5
