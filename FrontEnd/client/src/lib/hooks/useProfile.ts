@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agentapi from "../api/agentapi"
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { EditProfileSchema } from "../schemas/editProfileSchema";
 
 export const useProfile = (id?: string,predicate?:string) => {
+    const[filter,setfilter] = useState<string | null>(null)
     const queryClient = useQueryClient();
 
     // Get profile
@@ -17,6 +18,27 @@ export const useProfile = (id?: string,predicate?:string) => {
 
 
     });
+
+
+    // GetuserActivity 
+
+
+    const{data:userActivities, isLoading:loadingUserActivities}=useQuery<Activity[]>({
+        queryKey:['user-activities',filter],
+        queryFn:async() => {
+            const response = await agentapi.get<Activity[]>(`/profiles/${id}/activities`,{
+                params:{
+                    filter
+                }
+            });
+            return response.data
+
+        },
+        enabled: !!id && !!filter
+    })
+
+
+
 
     // Get Photos
     const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
@@ -191,6 +213,10 @@ const updateFollowing = useMutation({
         updateProfile,
         updateFollowing,
         followings,
-        loadingFollowings
+        loadingFollowings,
+        userActivities,
+        loadingUserActivities,
+        setfilter,
+        filter
     }
 }
