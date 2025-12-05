@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAccount } from '../../lib/hooks/useAcounts'
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { Typography } from '@mui/material';

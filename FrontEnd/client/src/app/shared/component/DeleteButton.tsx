@@ -1,6 +1,5 @@
 import {  DeleteOutline, Delete } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
-import React from 'react'
 
 export default function DeleteButton() {
    return (

@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import  { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { useProfile } from '../../lib/hooks/useProfile';
 import { Box, Card, CardMedia, Typography, Tabs, Tab, CardContent, Grid2 } from '@mui/material';

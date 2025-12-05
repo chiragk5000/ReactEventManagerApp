@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { useParams } from 'react-router'
 import { useProfile } from '../../lib/hooks/useProfile';
 import { Box, Button, Divider, ImageList, ImageListItem, Typography } from '@mui/material';

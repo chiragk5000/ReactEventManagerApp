@@ -1,5 +1,5 @@
 import { Box, Paper, Tab, Tabs } from '@mui/material';
-import React, { SyntheticEvent, useState } from 'react'
+import  { SyntheticEvent, useState } from 'react'
 import ProfilePhotos from './ProfilePhotos';
 import ProfileAbout from './ProfileAbout';
 import ProfileFollowing from './ProfileFollowing';
