@@ -38,11 +38,9 @@ export default function UserMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        slotProps={{
-          list: {
-            'aria-labelledby': 'basic-button',
-          },
-        }}
+       MenuListProps={{
+    'aria-labelledby': 'basic-button',
+  }}
       >
         <MenuItem component={Link} to='/createActivity' onClick={handleClose}>
         <ListItemIcon>

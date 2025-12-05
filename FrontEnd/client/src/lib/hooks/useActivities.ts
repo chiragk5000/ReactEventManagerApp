@@ -3,6 +3,7 @@ import agentapi from "../api/agentapi";
 import { useLocation } from "react-router";
 import { useAccount } from "./useAcounts";
 import { useStore } from "./useStore";
+import { FieldValues } from "react-hook-form";
 
 export const useActivites = (id?: string) => {
   //const apiurl = '/Activities';
@@ -27,9 +28,7 @@ export const useActivites = (id?: string) => {
       return response.data;
 
     },
-   staleTime: 1000 *60 * 5 ,
-   initialPageParam:null,
-    gcTime: 1000 * 60 * 5,   
+    
     getNextPageParam: (lastPage) => lastPage.nextCursor ? lastPage.nextCursor : undefined,
     enabled: !id && location.pathname === '/activites' && !!currentUser,
     select: data => ({
@@ -79,7 +78,9 @@ export const useActivites = (id?: string) => {
   const updateActivity = useMutation({
     mutationFn: async (activity: Activity) => {
       console.log("Activity", activity)
-      await agentapi.put('Activities/EditActivty', activity);
+     // await agentapi.put('Activities/EditActivty', activity);
+      await agentapi.put(`/Activities/${activity.id}`, activity);
+
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -93,7 +94,7 @@ export const useActivites = (id?: string) => {
 
   // post 
   const createActivity = useMutation({
-    mutationFn: async (activity: Activity) => {
+    mutationFn: async (activity: FieldValues) => {
       //const response = await agentapi.post('/Activities',activity);
       const response = await agentapi.post('Activities/Create', activity);
 

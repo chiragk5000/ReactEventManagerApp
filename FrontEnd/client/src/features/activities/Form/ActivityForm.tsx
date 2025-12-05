@@ -1,7 +1,7 @@
 import { Box, Button, Paper,  Typography } from '@mui/material'
 import { useActivites } from '../../../lib/hooks/useActivities';
 import {  useNavigate, useParams } from 'react-router';
-import {  useForm } from 'react-hook-form';
+import {  Resolver, useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { activitySchema, ActivitySchema } from '../../../lib/schemas/activitySchema';
 import { zodResolver} from '@hookform/resolvers/zod';
@@ -16,16 +16,8 @@ import LocationInput from '../../../app/shared/component/LocationInput';
 export default function ActivityForm() {
     const { control,reset,handleSubmit} = useForm<ActivitySchema>({
         mode:'onTouched', // for validating without clicking the button
-        resolver :zodResolver(activitySchema),
-         defaultValues: {
-    title: '',
-    description: '',
-    category: '',
-    date: '',
-    city: '',
-    venue: '',
-  
-  },
+        resolver :zodResolver(activitySchema) as Resolver<ActivitySchema>
+        
     });
     const { id } = useParams();
     const { updateActivity, createActivity, activity, isLoadingActivity } = useActivites(id);
@@ -38,8 +30,8 @@ export default function ActivityForm() {
             location:{
                 city:activity.city,
                 venue:activity.venue,
-                latittude:activity.latitude,
-                longitude:activity.longitude
+                latitude:activity.latitude,
+                longitutde:activity.longitutde
 
             }
         });

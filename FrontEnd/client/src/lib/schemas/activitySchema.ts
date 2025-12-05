@@ -8,7 +8,6 @@ export const activitySchema = z.object({
   description: requiredString("Description"),
   category: requiredString("Category"),
 
-  // ✅ Correct date field for Zod v4
   date: z.coerce
     .date()
     .refine((val) => val instanceof Date && !isNaN(val.getTime()), {
