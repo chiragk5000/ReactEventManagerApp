@@ -179,16 +179,21 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ReactEventManager API V1");
     });
 }
-
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
             .WithOrigins("https://localhost:3000"));
-app.MapHub<CommentHub>("/comments");
+app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.MapHub<CommentHub>("/comments");
+app.MapFallbackToController("Index", "Home");
 app.MapControllers();
+
 
 using var scope = app.Services.CreateScope(); 
 var services = scope.ServiceProvider;
