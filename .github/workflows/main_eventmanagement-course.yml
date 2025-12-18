@@ -21,6 +21,7 @@ jobs:
 
       - name: Install deps and build React app
         run: |
+          cd Frontend 
           cd client
           npm install
           npm run build
