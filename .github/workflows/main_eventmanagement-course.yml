@@ -28,8 +28,9 @@ jobs:
 
       # Copy React build into ASP.NET wwwroot
       - name: Copy React build to ASP.NET wwwroot
+        shell: cmd
         run: |
-          rmdir /s /q BackEnd\ReactEventManagerApi\wwwroot
+          if exist BackEnd\ReactEventManagerApi\wwwroot rmdir /s /q BackEnd\ReactEventManagerApi\wwwroot
           mkdir BackEnd\ReactEventManagerApi\wwwroot
           xcopy client\build BackEnd\ReactEventManagerApi\wwwroot /E /I /Y
 
