@@ -32,7 +32,7 @@ jobs:
         run: |
           if exist BackEnd\ReactEventManagerApi\wwwroot rmdir /s /q BackEnd\ReactEventManagerApi\wwwroot
           mkdir BackEnd\ReactEventManagerApi\wwwroot
-          xcopy client\build BackEnd\ReactEventManagerApi\wwwroot /E /I /Y
+          xcopy client\dist BackEnd\ReactEventManagerApi\wwwroot /E /I /Y
 
       # ---------- Build .NET ----------
       - name: Set up .NET
