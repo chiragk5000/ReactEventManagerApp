@@ -1,9 +1,13 @@
 ﻿using Domain.Entities;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using NuGet.Common;
 using ReactEventManagerApi.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -16,16 +20,20 @@ namespace ReactEventManagerApi.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailSender<User> _emailSender;
+
         private readonly IConfiguration _config;
 
         public AccountController(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
-            IConfiguration config)
+            IConfiguration config,
+            IEmailSender<User> emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _config = config;
+            _emailSender = emailSender;
         }
 
 
@@ -36,14 +44,30 @@ namespace ReactEventManagerApi.Controllers
             var user = await _userManager.FindByNameAsync(model.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return Unauthorized("Invalid username or password.");
+            if (!user.EmailConfirmed)
+
+                return Unauthorized(new
+                {
+                    errorMessage = "Email not verfied.Please verify your email",
+                    succeeded = false,
+                    isLockedOut = false,
+                    isNotAllowed = true,
+                    requiresTwoFactor = false
+                });
+
+
+            if (await _userManager.IsLockedOutAsync(user))
+                return Unauthorized("Account is locked");
+
 
             // ✅ Generate JWT
             var token = GenerateJwtToken(user);
 
             // ✅ Sign-in with cookie
-           // await _signInManager.SignInAsync(user, isPersistent: false);
+            // await _signInManager.SignInAsync(user, isPersistent: false);
 
             // ✅ Return both
+
             return Ok(new
             {
                 token,
@@ -55,12 +79,13 @@ namespace ReactEventManagerApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task <ActionResult> RegisterUser(RegisterDto registerdto)
+        public async Task<ActionResult> RegisterUser(RegisterDto registerdto)
         {
             var user = new User { UserName = registerdto.Email, Email = registerdto.Email, DisplayName = registerdto.DisplayName };
             var result = await _signInManager.UserManager.CreateAsync(user, registerdto.Password);
             if (result.Succeeded)
             {
+                await SendConfirmationEmailAsync(user, registerdto.Email);
                 return Ok();
             }
             foreach (var error in result.Errors)
@@ -68,6 +93,33 @@ namespace ReactEventManagerApi.Controllers
                 ModelState.AddModelError(error.Code, error.Description);
             }
             return ValidationProblem();
+        }
+        [AllowAnonymous]
+        [HttpGet("resendConfirmationEmail")]
+
+        public async Task<ActionResult> ResendConfirmEmail(string? email, string? userId)
+        {
+            if (string.IsNullOrEmpty(email) &&  string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Email or UserId must be provided");
+            }
+
+            var user = await _signInManager.UserManager.Users.FirstOrDefaultAsync(x => x.Email == email || x.Id==userId);
+            if (user == null || string.IsNullOrEmpty(user.Email))
+            {
+                return BadRequest("User not found");
+            }
+            await SendConfirmationEmailAsync(user, user.Email);
+            return Ok();
+        }
+
+        private async Task SendConfirmationEmailAsync(User user, string email)
+        {
+            var code = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var confirmEmailUrl = $"{_config["ClientAppUrl"]}/confirm-email?userId={user.Id}&code={code}";
+            await _emailSender.SendConfirmationLinkAsync(user, email, confirmEmailUrl);
         }
 
         [AllowAnonymous]
@@ -96,7 +148,7 @@ namespace ReactEventManagerApi.Controllers
             if (!User.Identity?.IsAuthenticated ?? true)
                 return Unauthorized();
 
-            
+
             var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByEmailAsync(email);
             //var username = User.Identity?.Name ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
@@ -108,9 +160,9 @@ namespace ReactEventManagerApi.Controllers
                 user.Id,
                 user.ImageUrl
             });
-            
 
-           
+
+
         }
 
         [HttpPost("logout")]
@@ -124,6 +176,27 @@ namespace ReactEventManagerApi.Controllers
             // Find user’s refresh tokens and revoke them
             return Ok(new { message = "Logged out successfully" });
         }
+
+        [AllowAnonymous]
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("Invalid User");
+            }
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
+            if (!result.Succeeded)
+                return BadRequest("Email confirmation failed");
+
+            return Ok("Email confirmed successfully");
+
+        }
+
 
         public class LoginModel
         {

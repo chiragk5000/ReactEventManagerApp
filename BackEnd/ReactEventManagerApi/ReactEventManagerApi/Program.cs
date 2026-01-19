@@ -5,6 +5,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using FluentValidation;
 using Infrastructure.DbContext;
+using Infrastructure.Email;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReactEventManagerApi.Middleware;
 using ReactEventManagerApi.SignalR;
+using Resend;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,6 +82,16 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>(); // for single 
     x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
 });
+
+// For resend email 3 party
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(opt => { 
+    opt.ApiToken = builder.Configuration["ResendEmails:ApiKey"]!;
+});
+builder.Services.AddTransient<IResend, ResendClient>();
+builder.Services.AddSingleton<EmailTemplateService>();
+builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
+
 builder.Services.AddScoped<IAppDbContext>(sp => (IAppDbContext)sp.GetRequiredService<AppDbContext>());
 
 builder.Services.AddScoped<IUserAcessor,UserAcessor>();
@@ -95,7 +107,7 @@ builder.Services.AddDataProtection();
 builder.Services.AddIdentityCore<User>(options =>
 {
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;

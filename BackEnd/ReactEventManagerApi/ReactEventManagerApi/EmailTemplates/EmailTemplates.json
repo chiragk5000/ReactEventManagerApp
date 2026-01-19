@@ -1,0 +1,11 @@
+{
+  "ConfirmEmail": {
+    "Subject": "Confirm your email",
+    "Body": "<html><body>Hello {{UserName}},<br/><br/>Please confirm your email by clicking <a href='{{Link}}'>here</a>.<br/><br/>Thanks!</body></html>"
+  },
+  "ResetPassword": {
+    "Subject": "Reset your password",
+    "Body": "<html><body>Hello {{UserName}},<br/>Your reset link is <a href='{{Link}}'>here</a></html>"
+
+  }
+}

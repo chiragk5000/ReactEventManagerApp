@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { LoginSchema } from "../schemas/loginSchema"
 import agentapi from "../api/agentapi"
-import {  useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
 
@@ -14,9 +14,9 @@ export const useAccount = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 
 
-   // to detect if user is login or register page
-    const isAuthPage =    location.pathname === "/login" || location.pathname === "/register";
-    
+    // to detect if user is login or register page
+    const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+
     // for login 
     const loginUser = useMutation({
         mutationFn: async (creds: LoginSchema) => {
@@ -26,20 +26,20 @@ export const useAccount = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ["user"] });
             //await navigate('/activites');
-            
+
         },
     });
 
     // for logout 
     const logoutUser = useMutation({
-        mutationFn :async()=>{
+        mutationFn: async () => {
 
             await agentapi.post('/account/logout');
         },
-        onSuccess:()=>{
-             localStorage.removeItem("jwt");
-            queryClient.removeQueries({queryKey:['user']});
-            queryClient.removeQueries({queryKey:['activities']});
+        onSuccess: () => {
+            localStorage.removeItem("jwt");
+            queryClient.removeQueries({ queryKey: ['user'] });
+            queryClient.removeQueries({ queryKey: ['activities'] });
 
             navigate('/');
         }
@@ -50,18 +50,20 @@ export const useAccount = () => {
 
 
     // for registerUser
-    const registerUser =useMutation({
-        mutationFn:async (creds:RegisterSchema)=>{
-            await agentapi.post('/account/register',creds)
+    const registerUser = useMutation({
+        mutationFn: async (creds: RegisterSchema) => {
+            await agentapi.post('/account/register', creds)
         },
-        onSuccess:()=>{
-            toast.success('Register succesful- you can now login');
-            navigate('/login');
-        }
+        // onSuccess: () => {
+        //     toast.success('Register succesful- you can now login');
+        //     navigate('/login');
+        // }
+
+
     })
 
     // for currentuser
-    const { data: currentUser ,isLoading:loadingUserInfo } = useQuery({
+    const { data: currentUser, isLoading: loadingUserInfo } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
 
@@ -69,10 +71,45 @@ export const useAccount = () => {
             return response.data
 
         },
-        enabled : !queryClient.getQueryData(['user']) && !isAuthPage,
+        enabled: !queryClient.getQueryData(['user']) && !isAuthPage,
         retry: false
 
     })
+
+
+    // verify email
+    const verifyEmail = useMutation({
+        mutationFn: async ({ userId, code }: { userId: string; code: string }) => {
+             await agentapi.get(
+                `/account/confirm-email?userId=${userId}&code=${code}`
+            );
+        }
+    });
+
+    // const resendConfirmationEmail = useMutation({
+    //     mutationFn: async({email}:{email:string;})=>{
+    //          await agentapi.get(`/account/resendConfirmationEmail?email=${email}`)
+    //     },
+    //     onSuccess:()=>{
+    //         toast.success('Email sent - Please check your email')
+    //     }
+    // })
+
+
+
+
+const resendConfirmationEmail = useMutation({
+  mutationFn: async ({userId,email}:{userId?:string,email?:string}) => {
+    return agentapi.get("/account/resendConfirmationEmail", {
+      params:{userId,email}
+    });
+  },
+  onSuccess: () => {
+    toast.success("Email sent - Please check your email");
+  }
+});
+
+
 
 
     return {
@@ -80,6 +117,8 @@ export const useAccount = () => {
         currentUser,
         logoutUser,
         loadingUserInfo,
-        registerUser
+        registerUser,
+        verifyEmail,
+        resendConfirmationEmail
     }
 }
